@@ -69,7 +69,7 @@ async function loadGroups() {
       document.getElementById("group-info").innerHTML = '<div class="loading-message">Cargando participantes...</div>'
   
       // Llamar a la API para obtener los participantes
-      const response = await fetch(`https://server-h6v3.onrender.com/groups/${userId}/${groupId}/participants`)
+      const response = await fetch(`https://iabimcat.onrender.com/groups/${userId}/${groupId}/participants`)
       const data = await response.json()
   
       if (data.success && data.numbers && data.numbers.length > 0) {

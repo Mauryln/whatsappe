@@ -15,14 +15,12 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!userId) return;
 
       try {
-        const response = await fetch(`https://server-h6v3.onrender.com/session-status/${userId}`);
+        const response = await fetch(`https://iabimcat.onrender.com/session-status/${userId}`);
         const data = await response.json();
         
         if (data.success && data.status === 'ready') {
-          // Solo cargar las etiquetas si no hemos verificado que no están disponibles
-          if (!labelsUnavailable && (labelDropdown.disabled || labelDropdown.options.length <= 1)) {
-            loadLabels();
-          }
+          // Siempre intentar cargar etiquetas cuando la sesión esté lista
+          loadLabels();
         } else {
           // Solo resetear si la sesión no está lista
           labelDropdown.innerHTML = '<option value="">Conecta WhatsApp primero</option>';
@@ -69,10 +67,10 @@ document.addEventListener("DOMContentLoaded", () => {
           
           labelsUnavailable = false;
         } else if (res.status === 501) {
-          // Código 501 indica que la función no está disponible (no es WhatsApp Business)
-          labelDropdown.innerHTML = '<option value="">WhatsApp Business no disponible</option>';
+          // Si el backend responde 501, mostrar como si no hubiera etiquetas
+          labelDropdown.innerHTML = '<option value="">No hay etiquetas disponibles</option>';
           labelDropdown.disabled = true;
-          console.log("WhatsApp Business no está disponible para esta cuenta");
+          // NO bloquear más intentos
         } else {
           // Solo mostrar error si el selector está vacío
           if (labelDropdown.options.length <= 1) {
@@ -82,7 +80,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       } catch (error) {
         console.error("Error al cargar etiquetas:", error);
-        // Solo mostrar error si el selector está vacío
         if (labelDropdown.options.length <= 1) {
           labelDropdown.innerHTML = '<option value="">Error al cargar etiquetas</option>';
           labelDropdown.disabled = true;

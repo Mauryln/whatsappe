@@ -11,14 +11,12 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!userId) return;
 
     try {
-      const response = await fetch(`https://server-h6v3.onrender.com/session-status/${userId}`);
+      const response = await fetch(`https://iabimcat.onrender.com/session-status/${userId}`);
       const data = await response.json();
       
       if (data.success && data.status === 'ready') {
-        // Solo cargar etiquetas si no hemos verificado que no están disponibles
-        if (!labelsUnavailable && (labelSelector.disabled || labelSelector.options.length <= 1)) {
-          loadLabels();
-        }
+        // Siempre intentar cargar etiquetas cuando la sesión esté lista
+        loadLabels();
       } else {
         labelSelector.innerHTML = '<option value="">Conecta WhatsApp primero</option>';
         labelSelector.disabled = true;
@@ -50,10 +48,10 @@ document.addEventListener("DOMContentLoaded", () => {
         labelSelector.disabled = false;
         labelsUnavailable = false;
       } else if (res.status === 501) {
-        // Código 501 indica que la función no está disponible (no es WhatsApp Business)
-        labelSelector.innerHTML = '<option value="">WhatsApp Business no disponible</option>';
+        // Si el backend responde 501, mostrar como si no hubiera etiquetas
+        labelSelector.innerHTML = '<option value="">No hay etiquetas disponibles</option>';
         labelSelector.disabled = true;
-        console.log("WhatsApp Business no está disponible para esta cuenta");
+        // NO bloquear más intentos
       } else {
         labelSelector.innerHTML = '<option value="">No hay etiquetas disponibles</option>';
         labelSelector.disabled = true;
