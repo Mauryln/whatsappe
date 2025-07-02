@@ -53,23 +53,15 @@ document.addEventListener("DOMContentLoaded", () => {
         // Código 501 indica que la función no está disponible (no es WhatsApp Business)
         labelSelector.innerHTML = '<option value="">WhatsApp Business no disponible</option>';
         labelSelector.disabled = true;
-        labelsUnavailable = true; // Marcar como no disponible para evitar más requests
         console.log("WhatsApp Business no está disponible para esta cuenta");
       } else {
         labelSelector.innerHTML = '<option value="">No hay etiquetas disponibles</option>';
         labelSelector.disabled = true;
-        labelsUnavailable = true; // Marcar como no disponible para evitar más requests
       }
     } catch (err) {
       console.error("Error cargando etiquetas:", err);
-      if (err.message && err.message.includes('501')) {
-        labelSelector.innerHTML = '<option value="">WhatsApp Business no disponible</option>';
-        labelSelector.disabled = true;
-        labelsUnavailable = true;
-      } else {
-        labelSelector.innerHTML = '<option value="">Error al cargar etiquetas</option>';
-        labelSelector.disabled = true;
-      }
+      labelSelector.innerHTML = '<option value="">Error al cargar etiquetas</option>';
+      labelSelector.disabled = true;
     }
   }
 
